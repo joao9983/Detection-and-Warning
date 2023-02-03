@@ -1,26 +1,21 @@
+from flask import Flask, request
 import RPi.GPIO as GPIO
-from flask import Flask
 
 app = Flask(__name__)
-
-# Define o pino de saída para o LED
-LED_PIN = 18
-
-# Configura o modo de numeração dos pinos
 GPIO.setmode(GPIO.BCM)
+GPIO.setup(18, GPIO.OUT)
 
-# Configura o pino do LED como saída
-GPIO.setup(LED_PIN, GPIO.OUT)
+@app.route("/led", methods=["GET"])
+def change_led_status():
+    status = request.args.get("status")
+    if status == "on":
+        GPIO.output(18, True)
+        return "LED ligado"
+    elif status == "off":
+        GPIO.output(18, False)
+        return "LED desligado"
+    else:
+        return "Status inválido"
 
-@app.route('/')
-def toggle_led():
-    # Lê o estado atual do LED
-    led_status = GPIO.input(LED_PIN)
-    
-    # Muda o estado do LED
-    GPIO.output(LED_PIN, not led_status)
-    
-    return 'LED está agora ' + ('ligado' if not led_status else 'desligado')
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5001)

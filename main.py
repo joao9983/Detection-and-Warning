@@ -1,6 +1,10 @@
 import cv2
 import time
 # Utilizando a YoloV4 - pesos já treinados
+import requests
+
+url = "http://192.168.3.57:5001/test"
+
 
 # class colors
 COLORS = [(0,255,255),(255,255,0),(0,255,0),(255,0,0)]
@@ -74,13 +78,42 @@ while cv2.waitKey(1)<1:
                 cv2.putText(frame,fps_label,(0,25),cv2.FONT_HERSHEY_SIMPLEX,1,(0,0,0),5)
             
                 cv2.putText(frame,fps_label,(0,25),cv2.FONT_HERSHEY_SIMPLEX,1,(0,255,0),3)
+                
+                while(True):        
+                    _,frame = capture.read()
+                    if not _:
+                        exit()
+
+                    #Inicio da contagem de tempo
+                    start = time.time()
+
+                    # Detecção
+                    classes, scores, boxes = model.detect(frame,0.2,0.4)
+
+ 
+
+                    if(len(boxes)>0):    
+                        url = "http://192.168.3.57:5001/led?status=on"
+                        response = requests.get(url)
+                        if response.status_code == 200:
+                            print(response.text)
+                        else:
+                            print("Erro na requisição: código de status " + str(response.status_code))
             
-            
-                count = count + 1
-            
-                print("PESSOA PESSOA PESSOA - LIGAR LED") 
+                            print("PESSOA PESSOA PESSOA - LIGAR LED") 
                     
-          
+                    else:
+                        url = "http://192.168.3.57:5001/led?status=off"
+                        response = requests.get(url)
+                         
+                        if response.status_code == 200:
+                            print(response.text)
+                        else:
+                            print("Erro na requisição: código de status " + str(response.status_code))
+            
+                            print("PESSOA PESSOA PESSOA - LIGAR LED") 
+                    
+                        break
             else : #aqui a chama a função q desliga o led (não há pessoa detectada)
                 count = 0
                 
