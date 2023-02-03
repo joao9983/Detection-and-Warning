@@ -78,24 +78,17 @@ while cv2.waitKey(1)<1:
             
                 count = count + 1
             
-                #print("PESSOA PESSOA PESSOA - LIGAR LED") 
+                print("PESSOA PESSOA PESSOA - LIGAR LED") 
                     
-                    #aqui vai ser chamada a função para quando  
-                                               # uma pessoa for detectada
-                with open("liga-led.py") as f:
-                    exec(f.read())
-                                                        
-        else : #aqui a chama a função q desliga o led (não há pessoa detectada)
+          
+            else : #aqui a chama a função q desliga o led (não há pessoa detectada)
                 count = 0
                 
-                #print("Not a person ")        
+                print("Not a person ")        
                     
-                with open("desliga-led.py") as f:
-                        exec(f.read())
-
+                
     # Mostrar imagem
     cv2.imshow('output',frame)
 
 
-        #Esperar resposta
    
