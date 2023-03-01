@@ -76,7 +76,7 @@ while True:
                 cv2.putText(frame,label,(box[0],box[1]-10),cv2.FONT_HERSHEY_SIMPLEX,0.5,color,2)
 
                 # Calcular o tempo levado para a detecção
-                fps_label = f"FPS:{round((1.0/(end-start)),2)}"
+                fps_label = "FPS:{}".format(round((1.0/(end-start)),2))
 
                 # Escrever fps na imagem
                 cv2.putText(frame,fps_label,(0,25),cv2.FONT_HERSHEY_SIMPLEX,1,(0,0,0),5)
@@ -85,6 +85,7 @@ while True:
                 
                 url = "http://192.168.3.57:5001/led?status=on"
                 response = requests.get(url)
+                print("primeira" + response.text)
                 
                 if response.status_code == 200:
                         print(response.text)
@@ -99,6 +100,7 @@ while True:
                 print("Not a person ")        
                 url = "http://192.168.3.57:5001/led?status=off"
                 response = requests.get(url)
+                print(response.text)
                         
                 if response.status_code == 200:
                     print(response.text)
